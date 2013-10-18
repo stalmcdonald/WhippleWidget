@@ -16,12 +16,6 @@ public class WidgetProvider extends AppWidgetProvider {
 	public void onUpdate(Context context, AppWidgetManager myWidgetManager,
 			int[] widgID) {
 		super.onUpdate(context, myWidgetManager, widgID);
-		
-	    Log.i(TIP, "onUpdate");
-		
-		final int appWidgIds = widgID.length;
-		
-		
 		   
 		    //setting pending intent
 		    Intent intent = new Intent(context, WhippleWidget.class);

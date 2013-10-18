@@ -1,22 +1,2 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    
-    <item
-        android:id="@+id/author"
-        android:title="About Author"
-        android:orderInCategory="300"
-        android:showAsAction="never"/>
-    
-    <item
-        android:id="@+id/about"
-        android:icon = "@drawable/info"
-        android:orderInCategory="100"
-        android:showAsAction="always"/>
-    
-    <item
-        android:id="@+id/tips"
-        android:title="Clamming Tips"
-        android:orderInCategory="200"
-        android:showAsAction="never"/>
-
 </menu>
