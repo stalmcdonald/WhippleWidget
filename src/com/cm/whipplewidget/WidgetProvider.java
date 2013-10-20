@@ -10,29 +10,41 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 public class WidgetProvider extends AppWidgetProvider {
-	public static final String TIP = "Current tide";
+	public static final String TIP = "Current Tide";
 	
 	@Override
 	public void onUpdate(Context context, AppWidgetManager myWidgetManager,
 			int[] widgID) {
 		super.onUpdate(context, myWidgetManager, widgID);
+		
+		//setting pending intent
+		
+		final int N = widgID.length;
+		
+		for (int i=0; i<N; i++) {
+		    int appWidgetId = widgID[i];
 		   
-		    //setting pending intent
+		    //creating remote view
+		    RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget);
+		    
+		    //identifies widget
 		    Intent intent = new Intent(context, WhippleWidget.class);
 		    intent.setAction(WhippleWidget.RANDOMTIPS);
-		    //identifies widget
-		    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgID);
-		    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//launch flag in the intent 
-		    PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-		    PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, 0);
+		    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+		    PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT); 
+		
 		 // Make the pending intent unique...
 		    intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-		  //creating remote view
-		    RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget);
-		    views.setOnClickPendingIntent(R.id.randomClamTips, pendingIntent);
+		 
 		    
+		    rv.setOnClickPendingIntent(R.id.randomClamTips, pendingIntent);
+
 		    // Tell the AppWidgetManager to perform an update on the current App Widget
-		    myWidgetManager.updateAppWidget(widgID, views);
-		
-	}
+		    myWidgetManager.updateAppWidget(widgID, rv);
+		    rv.setOnClickPendingIntent(R.id.imgBtn, pendingIntent);
+		    
+		    // Tell the AppWidgetManager to perform an update 
+		    myWidgetManager.updateAppWidget(appWidgetId, rv);
+		}
+	}	
 }
