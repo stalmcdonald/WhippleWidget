@@ -1,8 +1,16 @@
+/*
+ * Crystal McDonald
+ * MDF3
+ * 1310
+ * 
+ * Widget Application for Whipple
+ */
 package com.cm.whipplewidget;
 
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.Random;
+
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
@@ -33,13 +41,10 @@ public class WhippleWidget extends Service {
     	this.mainClamtips = "Dig clams at Low Tide";
     }
 
-
-    //when starting widget im calling methods to display first tip
-	@SuppressWarnings("deprecation")
+  //when starting widget im calling methods to display first tip
 	@Override
-	public int onStartCommand(Intent intent, int flags, int beginHere) {
-		
-		//super.onStart(intent, beginHere);
+	public void onStart(Intent intent, int beginHere) {
+	    handleCommand(intent, beginHere);
 		
         Log.i(WidgetProvider.TIP, "onStartCommand");
 
@@ -47,12 +52,17 @@ public class WhippleWidget extends Service {
 			
 		stopSelf(beginHere);
 		
+		return;
+	}
+
+	private int handleCommand(Intent intent, int startId) {
+		// TODO Auto-generated method stub
 		return START_STICKY;
 	}
 
 	//creating a method that handles random tips by timer
 	private String displayTipsAtRandom() {
-		Random random = new Random(Calendar.getInstance().getTimeInMillis());//changes based on time set up in xml (5000)
+		Random random = new Random(Calendar.getInstance().getTimeInMillis());//changes based on time 
 		int randomlyPlaced = random.nextInt(clamtips.size());
 		return clamtips.get(randomlyPlaced);
 	}
@@ -61,20 +71,19 @@ public class WhippleWidget extends Service {
 	private void getTips(Intent intent) {
         if (intent != null){
     		String requestedAction = intent.getAction();
-            Log.i(WidgetProvider.TIP, "ACTION " + requestedAction);
     		if (requestedAction != null && requestedAction.equals(RANDOMTIPS)){
 	            this.mainClamtips = displayTipsAtRandom();
 	            	            	 
-	            int tipWidg = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0);
+	            int widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, 0);
 
-	            Log.i(WidgetProvider.TIP, "Tidal Prediction: " + mainClamtips + " to widget " + tipWidg);
-
-	            AppWidgetManager myWidgMan = AppWidgetManager.getInstance(this);
+	            Log.i(WidgetProvider.TIP, "Tidal Prediction: " + mainClamtips + " to widget " + widgetId);
+	            
+	            AppWidgetManager appWidgetMan = AppWidgetManager.getInstance(this);
 	            RemoteViews rv = new RemoteViews(this.getPackageName(),R.layout.widget);
 	            rv.setTextViewText(R.id.randomClamTips, mainClamtips);
-	            myWidgMan.updateAppWidget(tipWidg, rv);
+	            appWidgetMan.updateAppWidget(widgetId, rv);
 	            
-	            Log.i(WidgetProvider.TIP, "Clamming tips updated.");
+	            Log.i(WidgetProvider.TIP, "Clamming Tips Updated!");
     		}
         }
 	}
@@ -85,4 +94,3 @@ public class WhippleWidget extends Service {
 	}
 
 }
-
